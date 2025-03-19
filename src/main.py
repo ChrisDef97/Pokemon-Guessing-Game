@@ -4,9 +4,10 @@ import time
 import pygame
 import sys
 import os
-from background import Background  # Import the Background class
+from background import Background  
 
 DB_FILE_PATH = 'C:/Users/CHRISTIAN/OneDrive/Documents/Projects/Pokemon Guessing Game/database/pokemon.db'
+
 
 
 # Initialize Pygame
@@ -17,15 +18,18 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Set paths using absolute paths
 font_path = os.path.join(base_dir, "fonts", "font.ttf")
-background_path = os.path.join(base_dir, "images", "background.gif")
+background_path = r'C:\Users\CHRISTIAN\OneDrive\Documents\Projects\Pokemon Guessing Game\src\images\GIF frames'
 
 # Set up display
 width, height = 1600, 1000  
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Pokémon Guessing Game')
+clock = pygame.time.Clock() # Create a clock object to control the frame rate
+running = True  # Flag to keep the game running
 
 font = pygame.font.Font(font_path, 40)
-background = Background(background_path)
+background = Background(r'C:\Users\CHRISTIAN\OneDrive\Documents\Projects\Pokemon Guessing Game\src\images\GIF frames')  # Adjust frame rate as needed
+
 
 class Button:
     def __init__(self, text, x, y, font):
@@ -202,6 +206,10 @@ def main_menu():
     while True:
         screen.fill((128, 0, 128))  # Purple background
         
+
+        # Draw the background
+        background.draw(screen)
+
         # Use render_multicolor_text to render "Welcome to the" in blue
         render_multicolor_text(screen, font, ["Welcome to the"], [(0, 0, 139)], width // 2 - 190, 150)
         
@@ -213,8 +221,6 @@ def main_menu():
         rules_button = Button("Game Rules", width // 2 - 175, 500, font)
         exit_button = Button("Exit Game", width // 2 - 160, 600, font)
 
-        # Draw the background
-        background.draw(screen)
         # Draw the buttons
         start_button.draw(screen)
         rules_button.draw(screen)
@@ -420,8 +426,29 @@ def provide_hint(selected_pokemon, wrong_guesses, revealed_indices, mode, hints_
 
 # Game loop
 def game_loop():
+    global running  # This tells Python to use the global variable
+    while running:
+        print("Game loop is running")  # Debugging print
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False  # This will properly exit the loop
+
+        background.update()  # Ensure this is being called
+        background.draw(screen)
+
+        pygame.display.flip()
+        clock.tick(60)
+
     while True:  # Outer loop to allow restarting the game
+        background.update()  # Update the frame of the background
+        background.draw(screen)  # Draw the current background frame
+
+        # Continue with other game rendering (text, buttons, etc.)
+        
         main_menu()  # Show the main menu
+
+        pygame.display.update()  # Make sure the display is updated
 
         while True:
             mode = difficulty_selection()
@@ -455,6 +482,7 @@ def game_loop():
                     elif mode == 'hard':
                         start_time = time.time()  # Get the current time
                         countdown = 300  # 5-minute countdown for hard mode
+
                     while True:
                         # Handle timers for both modes
                         if mode == 'easy':
@@ -476,7 +504,6 @@ def game_loop():
                         hidden_name_display = font.render(display_hidden_name(pokemon_name, revealed_indices), True, (255, 255, 255))
 
                         # Replace title_text logic with the multicolor rendering
-                        # Set up the multicolored title using the custom function
                         screen.fill((128, 0, 128))  # Purple background
 
                         # Call the render_multicolor_text function to display the title with "Pokemon" in red and "Guessing Game!" in deep blue
@@ -554,3 +581,5 @@ def game_loop():
 
 # Start the game
 game_loop()
+
+pygame.quit() # Quit Pygame when the game loop ends
