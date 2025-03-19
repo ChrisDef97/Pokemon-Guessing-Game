@@ -1,0 +1,8 @@
+2. poner tiempo
+4. almacenar respuestas del user para darle la opcion de verlas al final del juego
+6. UI con pygame, imagenes de pokemon 
+
+Requirements realizados
+5. que al final en la pantalla de victoria salgan los datos del pokemon  DONE
+3. poner dificultades DONE
+1. poner que siempre muestre el nombre del pokemon " _ _ _ _ _ _" para mejor visualizacion, ademas de dejar la pistas en pantalla DONE
